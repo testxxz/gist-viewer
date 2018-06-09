@@ -10,7 +10,7 @@
     <h1>Gist Viewer</h1>
     <h4>Displays the Gist of your choice, assuming it’s in standard
       style.css + index.html + script.js format</h4>
-    <label>Gist URL:<br>
+    <label>Gist URL or ID:<br>
       <input style="width:90%;font-family:monospace"></input>
     </label>
     <button>Go</button>
@@ -34,7 +34,7 @@
       $style = $('#gist-viewer-style'),
       $index = $('#gist-viewer-index'),
       $script = $('#gist-viewer-script'),
-      validGistId = /^[0-9a-f]{32}$/,
+      validGistId = /^([0-9a-f]{32})$/,
       validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-z]+\/([0-9a-f]{32})$/,
       queryString = location.href.split('?')[1]
 
@@ -53,8 +53,10 @@
       $button.addEventListener('click', onGo)
       $input.addEventListener( 'keypress', e => { if ( (e.which||e.keyCode) === 13 ) onGo() } )
       function onGo () {
-        const gistId = ($input.value.match(validGistUrl) || [])[1]
-        if (! gistId) return alert('Not a valid Gist URL!')
+        let gistId = ($input.value.match(validGistId) || [])[1]
+        if (! gistId)
+          gistId = ($input.value.match(validGistUrl) || [])[1]
+        if (! gistId) return alert('Not a valid Gist ID or URL!')
         location.href += '?' + gistId
       }
 
