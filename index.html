@@ -25,12 +25,12 @@
       $script = $('#script'),
       validGistId = /^[0-9a-f]{32}$/,
       validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-z]+\/([0-9a-f]{32})$/,
-      query = location.href.split('?').pop()
+      queryString = location.href.split('?').pop()
 
     // Fetch Gist metadata if the query string is a valid Gist ID.
-    if ( query && validGistId.test(query) ) {
+    if ( queryString && validGistId.test(queryString) ) {
 
-      fetch(`https://api.github.com/gists/${gistId}`)
+      fetch(`https://api.github.com/gists/${queryString}`)
         .then(function(response) {
           return response.json()
         })
@@ -46,7 +46,7 @@
         location.href += '?' + gistId
       }
 
-      if (query) alert('The query string is not a valid Gist ID')
+      if (queryString) alert('The query string is not a valid Gist ID')
     }
       
     // Update style.css + index.html + script.js.
