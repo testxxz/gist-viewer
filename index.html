@@ -4,7 +4,16 @@
 <title>Gist Viewer</title>
 </head>
 <body>
-<h1>Gist Viewer</h1>
-<h4>Displays the Gist of your choice, assuming it’s in standard index.html + style.css + script.js format</h4>
+  <h1>Gist Viewer</h1>
+  <h4>Displays the Gist of your choice, assuming it’s in standard index.html + style.css + script.js format</h4>
+  <input></input>
+  <script>{
+    const
+      $input = document.querySelector('input')
+    $input.addEventListener('change', onChange)
+    function onChange () {
+      console.log($input.value)
+    }
+  }</script>
 </body>
 </html>
