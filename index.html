@@ -51,7 +51,7 @@
     } else {
       
       $button.addEventListener('click', onGo)
-      $input.addEventListener( 'keypress', e => if ( (e.which||e.keyCode) === 13 ) onGo() )
+      $input.addEventListener( 'keypress', e => { if ( (e.which||e.keyCode) === 13 ) onGo() } )
       function onGo () {
         const gistId = ($input.value.match(validGistUrl) || [])[1]
         if (! gistId) return alert('Not a valid Gist URL!')
