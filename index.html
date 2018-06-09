@@ -6,13 +6,16 @@
 <body>
   <h1>Gist Viewer</h1>
   <h4>Displays the Gist of your choice, assuming it’s in standard index.html + style.css + script.js format</h4>
-  <input></input>
+  <label>Gist URL: <input></input></label>
+  <button>Go</button>
   <script>{
     const
-      $input = document.querySelector('input')
-    $input.addEventListener('change', onChange)
-    function onChange () {
-      console.log($input.value)
+      $input = document.querySelector('input'),
+      $button = document.querySelector('button'),
+      validGistUrl = /^https:\/\/gist\.github\.com\/(testxxz\/[0-9a-f])+$/
+    $button.addEventListener('click', onGo)
+    function onGo () {
+      console.log( $input.value.match(validGistUrl) )
     }
   }</script>
 </body>
