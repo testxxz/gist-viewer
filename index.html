@@ -14,7 +14,7 @@
       $input = document.querySelector('input'),
       $button = document.querySelector('button'),
       $render = document.querySelector('#render'),
-      validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-f]+\/([0-9a-f]+)$/
+      validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-z]+\/([0-9a-f]+)$/
 
     // Fetch Gist metadata with a ‘Go’ button click.
     $button.addEventListener('click', onGo)
