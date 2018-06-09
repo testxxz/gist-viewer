@@ -49,7 +49,6 @@
         })
         .then(function(indexText) {
           $index.innerHTML = indexText
-          console.log(response)
           $script.src = gistMeta.files['script.js'].raw_url
             .replace('https://gist.githubusercontent.com/','https://cdn.rawgit.com/')
         })
