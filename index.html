@@ -4,10 +4,12 @@
 <title>Gist Viewer</title>
 </head>
 <body>
-  <h1>Gist Viewer</h1>
-  <h4>Displays the Gist of your choice, assuming it’s in standard style.css + index.html + script.js format</h4>
-  <label>Gist URL: <input></input></label>
-  <button>Go</button>
+  <div id="ui">
+    <h1>Gist Viewer</h1>
+    <h4>Displays the Gist of your choice, assuming it’s in standard style.css + index.html + script.js format</h4>
+    <label>Gist URL: <input></input></label>
+    <button>Go</button>
+  </div>
   <link id="style" rel="stylesheet">
   <div id="index"></div>
   <script id="script"></script>
@@ -15,23 +17,36 @@
     const
       d = document,
       $ = d.querySelector.bind(d),
+      $ui = $('#ui'),
       $input = $('input'),
       $button = $('button'),
       $style = $('#style'),
       $index = $('#index'),
       $script = $('#script'),
-      validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-z]+\/([0-9a-f]+)$/
+      validGistId = /^[0-9a-f]{32}$/,
+      validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-z]+\/([0-9a-f]{32})$/,
+      query = location.href.split('?').pop()
 
-    // Fetch Gist metadata with a ‘Go’ button click.
-    $button.addEventListener('click', onGo)
-    function onGo () {
-      const gistId = ($input.value.match(validGistUrl) || [])[1]
-      if (! gistId) return alert('Not a valid Gist URL!')
+    // Fetch Gist metadata if the query string is a valid Gist ID.
+    if ( query && validGistId.test(query) ) {
+
       fetch(`https://api.github.com/gists/${gistId}`)
         .then(function(response) {
           return response.json()
         })
         .then(updateFiles)
+
+    // Otherwise, show the UI for selecting a Gist.
+    } else {
+      
+      $button.addEventListener('click', onGo)
+      function onGo () {
+        const gistId = ($input.value.match(validGistUrl) || [])[1]
+        if (! gistId) return alert('Not a valid Gist URL!')
+        location.href += '?' + gistId
+      }
+
+      if (query) alert('The query string is not a valid Gist ID')
     }
       
     // Update style.css + index.html + script.js.
@@ -48,6 +63,7 @@
           return response.text()
         })
         .then(function(indexText) {
+          $ui.style.display = 'none'
           $index.innerHTML = indexText
           $script.src = gistMeta.files['script.js'].raw_url
             .replace('https://gist.githubusercontent.com/','https://cdn.rawgit.com/')
