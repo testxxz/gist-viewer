@@ -41,11 +41,12 @@
       if (! gistMeta.files['style.css']) return alert('The Gist has no ‘style.css’ file!')
       if (! gistMeta.files['index.html']) return alert('The Gist has no ‘index.html’ file!')
       if (! gistMeta.files['script.js']) return alert('The Gist has no ‘script.js’ file!')
-      $style.href = gistMeta.files['style.css'].raw_url
-      fetch(gistMeta.files['index.html'].raw_url)
+      $style.href = gistMeta.files['style.css'].raw_url.replace('https://gist.githubusercontent.com/','https://cdn.rawgit.com/
+      fetch( gistMeta.files['index.html'].raw_url') )
         .then(function(response) {
           $index.innerHTML = response
-          $script.src = gistMeta.files['script.js'].raw_url
+          console.log(response)
+          $script.src = gistMeta.files['script.js'].raw_url.replace('https://gist.githubusercontent.com/','https://cdn.rawgit.com/
         })
     }
   }</script>
