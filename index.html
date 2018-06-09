@@ -45,7 +45,10 @@
         .replace('https://gist.githubusercontent.com/','https://cdn.rawgit.com/')
       fetch(gistMeta.files['index.html'].raw_url)
         .then(function(response) {
-          $index.innerHTML = response
+          return response.text()
+        })
+        .then(function(indexText) {
+          $index.innerHTML = indexText
           console.log(response)
           $script.src = gistMeta.files['script.js'].raw_url
             .replace('https://gist.githubusercontent.com/','https://cdn.rawgit.com/')
