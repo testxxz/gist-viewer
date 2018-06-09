@@ -1,18 +1,29 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Gist Viewer</title>
+<title>Loading...</title>
 </head>
 <body>
-  <div id="ui">
+  
+  <!-- User Interface, if the query string is not a valid Gist ID -->
+  <div id="ui" style="display:none">
     <h1>Gist Viewer</h1>
-    <h4>Displays the Gist of your choice, assuming it’s in standard style.css + index.html + script.js format</h4>
-    <label>Gist URL: <input></input></label>
+    <h4>Displays the Gist of your choice, assuming it’s in standard
+      style.css + index.html + script.js format</h4>
+    <label>Gist URL:<br>
+      <input style="width:90%;font-family:monospace"></input>
+    </label>
     <button>Go</button>
   </div>
+  
+  <!-- Placeholders for Gist content -->
   <link id="style" rel="stylesheet">
   <div id="index"></div>
   <script id="script"></script>
+
+  <!-- If the query string is a valid Gist ID, load style.css, index.html 
+    and script.js into the placeholders. Otherwise, show a form for 
+    selecting a Gist to load. -->
   <script>{
     const
       d = document,
@@ -46,24 +57,33 @@
         location.href += '?' + gistId
       }
 
-      if (queryString) alert('The query string is not a valid Gist ID')
+      d.title = 'Gist Viewer'
+      $ui.style.display = 'default'
+
+      if (queryString) alert(`The query string ‘${queryString}’ is not a valid Gist ID`)
     }
       
     // Update style.css + index.html + script.js.
     function updateFiles (gistMeta) {
+
+      // Basic validation, and update the page title.
       if (! gistMeta) return alert('No Gist meta!')
       if (! gistMeta.files) return alert('No Gist files meta!')
+      d.title = gistMeta.description
+
+      // Filename validation, and load style.css.
       if (! gistMeta.files['style.css']) return alert('The Gist has no ‘style.css’ file!')
       if (! gistMeta.files['index.html']) return alert('The Gist has no ‘index.html’ file!')
       if (! gistMeta.files['script.js']) return alert('The Gist has no ‘script.js’ file!')
       $style.href = gistMeta.files['style.css'].raw_url
         .replace('https://gist.githubusercontent.com/','https://cdn.rawgit.com/')
+
+      // Load index.html, and when it’s been fetched load script.js.
       fetch(gistMeta.files['index.html'].raw_url)
         .then(function(response) {
           return response.text()
         })
         .then(function(indexText) {
-          $ui.style.display = 'none'
           $index.innerHTML = indexText
           $script.src = gistMeta.files['script.js'].raw_url
             .replace('https://gist.githubusercontent.com/','https://cdn.rawgit.com/')
