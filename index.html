@@ -6,7 +6,7 @@
 <body>
   
   <!-- User Interface, if the query string is not a valid Gist ID -->
-  <div id="ui" style="display:none">
+  <div id="gist-viewer-ui" style="display:none">
     <h1>Gist Viewer</h1>
     <h4>Displays the Gist of your choice, assuming it’s in standard
       style.css + index.html + script.js format</h4>
@@ -17,9 +17,9 @@
   </div>
   
   <!-- Placeholders for Gist content -->
-  <link id="style" rel="stylesheet">
-  <div id="index"></div>
-  <script id="script"></script>
+  <link id="gist-viewer-style" rel="stylesheet">
+  <div id="gist-viewer-index"></div>
+  <script id="gist-viewer-script"></script>
 
   <!-- If the query string is a valid Gist ID, load style.css, index.html 
     and script.js into the placeholders. Otherwise, show a form for 
@@ -28,12 +28,12 @@
     const
       d = document,
       $ = d.querySelector.bind(d),
-      $ui = $('#ui'),
+      $ui = $('#gist-viewer-ui'),
       $input = $('input'),
       $button = $('button'),
-      $style = $('#style'),
-      $index = $('#index'),
-      $script = $('#script'),
+      $style = $('#gist-viewer-style'),
+      $index = $('#gist-viewer-index'),
+      $script = $('#gist-viewer-script'),
       validGistId = /^[0-9a-f]{32}$/,
       validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-z]+\/([0-9a-f]{32})$/,
       queryString = location.href.split('?')[1]
@@ -51,6 +51,7 @@
     } else {
       
       $button.addEventListener('click', onGo)
+      $input.addEventListener( 'keypress', e => if ( (e.which||e.keyCode) === 13 ) onGo() )
       function onGo () {
         const gistId = ($input.value.match(validGistUrl) || [])[1]
         if (! gistId) return alert('Not a valid Gist URL!')
@@ -90,5 +91,6 @@
         })
     }
   }</script>
+
 </body>
 </html>
