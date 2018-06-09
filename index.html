@@ -5,15 +5,21 @@
 </head>
 <body>
   <h1>Gist Viewer</h1>
-  <h4>Displays the Gist of your choice, assuming it’s in standard index.html + style.css + script.js format</h4>
+  <h4>Displays the Gist of your choice, assuming it’s in standard style.css + index.html + script.js format</h4>
   <label>Gist URL: <input></input></label>
   <button>Go</button>
-  <div id="render"></div>
+  <link id="style" rel="stylesheet">
+  <div id="index"></div>
+  <script id="script"></script>
   <script>{
     const
-      $input = document.querySelector('input'),
-      $button = document.querySelector('button'),
-      $render = document.querySelector('#render'),
+      d = document,
+      $ = d.querySelector.bind(d),
+      $input = $('input'),
+      $button = $('button'),
+      $style = $('#style'),
+      $index = $('#index'),
+      $script = $('#script'),
       validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-z]+\/([0-9a-f]+)$/
 
     // Fetch Gist metadata with a ‘Go’ button click.
@@ -25,21 +31,22 @@
         .then(function(response) {
           return response.json()
         })
-        .then(render)
+        .then(updateFiles)
     }
-    function render (gistMeta) {
+      
+    // Update style.css + index.html + script.js.
+    function updateFiles (gistMeta) {
       if (! gistMeta) return alert('No Gist meta!')
       if (! gistMeta.files) return alert('No Gist files meta!')
       if (! gistMeta.files['style.css']) return alert('The Gist has no ‘style.css’ file!')
       if (! gistMeta.files['index.html']) return alert('The Gist has no ‘index.html’ file!')
       if (! gistMeta.files['script.js']) return alert('The Gist has no ‘script.js’ file!')
-      const html =
-`
-${gistMeta.files['style.css'].raw_url}<br>
-${gistMeta.files['index.html'].raw_url}<br>
-${gistMeta.files['script.js'].raw_url}<br>
-`
-      $render.innerHTML = html
+      $style.href = gistMeta.files['style.css'].raw_url
+      fetch(gistMeta.files['index.html'].raw_url)
+        .then(function(response) {
+          $index.innerHTML = response
+          $script.src = gistMeta.files['script.js'].raw_url
+        })
     }
   }</script>
 </body>
