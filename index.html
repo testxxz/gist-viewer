@@ -36,7 +36,7 @@
       $script = $('#script'),
       validGistId = /^[0-9a-f]{32}$/,
       validGistUrl = /^https:\/\/gist\.github\.com\/[-0-9a-z]+\/([0-9a-f]{32})$/,
-      queryString = location.href.split('?').pop()
+      queryString = location.href.split('?')[1]
 
     // Fetch Gist metadata if the query string is a valid Gist ID.
     if ( queryString && validGistId.test(queryString) ) {
